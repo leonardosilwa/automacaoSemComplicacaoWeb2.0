@@ -1,53 +1,58 @@
 package br.com.chronosacademy.automacaoWeb;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import static org.junit.Assert.assertEquals;
+import java.sql.DriverManager;
 
 public class TesteWebOnly4 {
 
+    WebDriver driver;
+
+    @Before
+
+
+    public void inicializateste(){
+
+
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("http://www.aprendendotestar.com.br/treinar-automacao.php");
+
+    }
+
+
     @Test
 
-    public void testeAcesso(){
+    public void primeiroTeste(){
 
-        // chamada da dependencia . chamada do driver do navegador . chamada da configuração
-        WebDriverManager.chromedriver().setup();
+        String textosite = "/html/body/section/section[1]/div/h1";
+        WebElement elemento = driver.findElement(By.xpath(textosite));
+        String textovalido = elemento.getText();
+        assertEquals("INICIANDO NA AUTOMAÇÃO DE TESTES.", textovalido);
 
-        // nova instancia do webdriver (Cara que vai ter poder de mexer no driver) = new nome do driver
-        WebDriver driver = new ChromeDriver();
+    }
 
-        // aumentar a tela = chamada do cara que vai mexer no driver. configuração. janela. maximizar
-        driver.manage().window().maximize();
+    @Test
+    public void atualizarPagina(){
+        String textosite = "/html/body/section/section[2]/div/p[3]/a";
+        WebElement elemento = driver.findElement(By.xpath(textosite));
+        elemento.click();
 
-        // chama o cara que mexe no driver ; chama o endereço = get("")
-        driver.get("https://www.chronosacademy.com.br/");
+    }
 
-        // colocar o elementro encontrado em uma variavel (nesse exmplo String)
-        String xpathTitulo = "/html/body/div/div/div/div/div/section[2]/div[3]/div/div/div/div/div[1]/div/h4";
 
-        //Chamaelemento WebElement Atribui um nome para o elemento e busca ele dentro do driver
-        WebElement titulo = driver.findElement(By.xpath(xpathTitulo));
+    @After
 
-        //colocando o elemento encontrado dentro de uma variavel
-        String txtTitulo = titulo.getText();
-
-        //comparando o elemento encontrato com o experado
-        Assert.assertEquals("Porque Tempo É Conhecimento", txtTitulo);
-
-        // chama o cara que mexe no driver. sair do navegador = quit();
+    public void finalizaTeste(){
         driver.quit();
-
-
-        /*
-        String texto = driver.findElement(By.xpath("/html/body/div/div/div/div/div/section[2]/div[3]/div/div/div/div/div[1]/div/h4"))
-                .getText();
-        Assert.assertEquals("Porque Tempo É Conhecimento", texto);
-        */
-
     }
 
 
