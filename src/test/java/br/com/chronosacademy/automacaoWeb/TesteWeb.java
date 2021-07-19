@@ -1,6 +1,8 @@
 package br.com.chronosacademy.automacaoWeb;
 
 import br.com.chronosacademy.core.Driver;
+import br.com.chronosacademy.pages.CursoPage;
+import br.com.chronosacademy.pages.PrincipalPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -11,10 +13,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import static org.junit.Assert.assertEquals;
 
+
 public class TesteWeb {
 
     WebDriver driver;
     Driver driverWeb;
+    PrincipalPage principalPage;
+    CursoPage cursoPage;
+
 
     @Before
 
@@ -23,6 +29,7 @@ public class TesteWeb {
         driverWeb = new Driver("chrome");
         driver = driverWeb.getDriver();
         driver.get("https://www.chronosacademy.com.br/");
+        principalPage = new PrincipalPage(driver);
 
     }
 
@@ -31,32 +38,25 @@ public class TesteWeb {
 
     public void primeiroTeste(){
 
-        String xpathTitulo = "//section[2]//h4";
-        //     Atribuindo uma variavel para o elemento encontrado
+        String titulo = principalPage.getTitulo();
 
-        WebElement titulo = driver.findElement(By.xpath(xpathTitulo)); // encontramos o elemento no caminho
-        String txtTitulo = titulo.getText(); // colocando o elemento encontrato em uma variavel
-
-        assertEquals("Porque Tempo É Conhecimento", txtTitulo); // validação do elemento com o esperado
+        assertEquals("Porque Tempo É Conhecimento", titulo); // validação do elemento com o esperado
 
     }
 
     @Test
     public void segundoTeste(){
 
-        String xpathBotao = "//section[2]/div[3]//a";
-        //     Atribuindo uma variavel para o elemento encontrado
+        cursoPage = new CursoPage(driver);
+        principalPage.clickBotao();
 
-        WebElement btnTitulo = driver.findElement(By.xpath(xpathBotao)); // encontramos o elemento no caminho
-        btnTitulo.click(); // Ação do elementro encontrado
+        String titulo = cursoPage.getTitulo2();
 
-        String xpathTituto = "//section[2]//h2";
-        WebElement h2Titulo = driver.findElement(By.xpath(xpathTituto));
-
-        assertEquals("AUTOMAÇÃO SEM COMPLICAÇÃO WEB 2.0", h2Titulo.getText());
+        assertEquals("AUTOMAÇÃO SEM COMPLICAÇÃO WEB 2.0", titulo);
 
     }
-   @After
+
+    @After
 
     public void finalizateste(){
 
